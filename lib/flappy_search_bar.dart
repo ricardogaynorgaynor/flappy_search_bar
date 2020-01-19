@@ -371,6 +371,10 @@ class _SearchBarState<T> extends State<SearchBar<T>>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
                 Flexible(
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 200),
