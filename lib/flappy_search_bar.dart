@@ -118,6 +118,8 @@ class SearchBar<T> extends StatefulWidget {
   /// List of items showed by default
   final List<T> suggestions;
 
+  final bool autoFocus;
+
   /// Callback returning the widget corresponding to a Suggestion item
   final Widget Function(T item, int index) buildSuggestion;
 
@@ -221,6 +223,7 @@ class SearchBar<T> extends StatefulWidget {
     this.onCancelled,
     this.suggestions = const [],
     this.buildSuggestion,
+    this.autoFocus = true,
     this.searchBarStyle = const SearchBarStyle(),
     this.crossAxisCount = 1,
     this.shrinkWrap = false,
@@ -383,6 +386,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
                           style: widget.textStyle,
+                          autofocus: autoFocus,
                           decoration: InputDecoration(
                             icon: widget.icon,
                             border: InputBorder.none,
