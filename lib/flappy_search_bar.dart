@@ -386,7 +386,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
                           controller: _searchQueryController,
                           onChanged: _onTextChanged,
                           style: widget.textStyle,
-                          autofocus: autoFocus,
+                          autofocus: widget.autoFocus,
                           decoration: InputDecoration(
                             icon: widget.icon,
                             border: InputBorder.none,
