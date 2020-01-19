@@ -168,6 +168,8 @@ class SearchBar<T> extends StatefulWidget {
   /// Callback when cancel button is triggered
   final VoidCallback onCancelled;
 
+  final VoidCallback onBackPressed;
+
   /// Controller used to be able to sort, filter or replay the search
   final SearchBarController searchBarController;
 
@@ -221,6 +223,7 @@ class SearchBar<T> extends StatefulWidget {
     this.textStyle = const TextStyle(color: Colors.black),
     this.cancellationText = const Text("Cancel"),
     this.onCancelled,
+    this.onBackPressed,
     this.suggestions = const [],
     this.buildSuggestion,
     this.autoFocus = true,
@@ -307,9 +310,14 @@ class _SearchBarState<T> extends State<SearchBar<T>>
     });
   }
 
+  void _onBackPressed(){
+    if (widget.onBackPressed != null) {
+        widget.onBackPressed();
+    }
+  }
   void _cancel() {
     if (widget.onCancelled != null) {
-      widget.onCancelled();
+        widget.onCancelled();
     }
 
     setState(() {
@@ -373,7 +381,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context, false),
+                  onPressed: _onBackPressed,
                 ),
                 Flexible(
                   child: AnimatedContainer(
