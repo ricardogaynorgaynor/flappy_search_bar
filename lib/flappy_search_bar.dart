@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:flappy_search_bar/scaled_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+// import 'package:flappy_search_bar/search_bar_style.dart';
 
 import 'search_bar_style.dart';
 
@@ -120,6 +121,12 @@ class SearchBar<T> extends StatefulWidget {
 
   final bool autoFocus;
 
+  final double searchAreaHeight;
+
+  final Color backButtonColor;
+
+  final bool includeBackButton;
+
   /// Callback returning the widget corresponding to a Suggestion item
   final Widget Function(T item, int index) buildSuggestion;
 
@@ -158,6 +165,9 @@ class SearchBar<T> extends StatefulWidget {
 
   /// Color of the icon when search bar is active
   final Color iconActiveColor;
+
+  // background container search color
+  final Color searchAreaColor;
 
   /// Text style of the text in the search bar
   final TextStyle textStyle;
@@ -234,6 +244,10 @@ class SearchBar<T> extends StatefulWidget {
     this.scrollDirection = Axis.vertical,
     this.mainAxisSpacing = 0.0,
     this.crossAxisSpacing = 0.0,
+    this.searchAreaColor = Colors.white,
+    this.searchAreaHeight = 80,
+    this.backButtonColor = Colors.black,
+    this.includeBackButton = true,
     this.listPadding = const EdgeInsets.all(0),
     this.searchBarPadding = const EdgeInsets.all(0),
     this.headerPadding = const EdgeInsets.all(0),
@@ -312,12 +326,12 @@ class _SearchBarState<T> extends State<SearchBar<T>>
 
   void _onBackPressed(){
     if (widget.onBackPressed != null) {
-        widget.onBackPressed();
+      widget.onBackPressed();
     }
   }
   void _cancel() {
     if (widget.onCancelled != null) {
-        widget.onCancelled();
+      widget.onCancelled();
     }
 
     setState(() {
@@ -338,7 +352,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
         itemCount: items.length,
         shrinkWrap: widget.shrinkWrap,
         staggeredTileBuilder:
-            widget.indexedScaledTileBuilder ?? (int index) => ScaledTile.fit(1),
+        widget.indexedScaledTileBuilder ?? (int index) => ScaledTile.fit(1),
         scrollDirection: widget.scrollDirection,
         mainAxisSpacing: widget.mainAxisSpacing,
         crossAxisSpacing: widget.crossAxisSpacing,
@@ -372,17 +386,17 @@ class _SearchBarState<T> extends State<SearchBar<T>>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: widget.searchBarPadding,
-          child: Container(
-            height: 80,
+        Container(
+          color: widget.searchAreaColor,
+            height: widget.searchAreaHeight,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                widget.includeBackButton ?
                 IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(Icons.arrow_back, color: widget.backButtonColor,),
                   onPressed: _onBackPressed,
-                ),
+                ): null,
                 Flexible(
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 200),
@@ -400,7 +414,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
                           style: widget.textStyle,
                           autofocus: widget.autoFocus,
                           decoration: InputDecoration(
-                            icon: widget.icon,
+                            //icon: widget.icon,
                             border: InputBorder.none,
                             hintText: widget.hintText,
                             hintStyle: widget.hintStyle,
@@ -422,7 +436,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
                     child: AnimatedContainer(
                       duration: Duration(milliseconds: 200),
                       width:
-                          _animate ? MediaQuery.of(context).size.width * .2 : 0,
+                      _animate ? MediaQuery.of(context).size.width * .2 : 0,
                       child: Container(
                         color: Colors.transparent,
                         child: Center(
@@ -435,7 +449,6 @@ class _SearchBarState<T> extends State<SearchBar<T>>
               ],
             ),
           ),
-        ),
         Padding(
           padding: widget.headerPadding,
           child: widget.header ?? Container(),
